@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>{{ test.title }}</title>
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Amatic+SC:wght@400;700&display=swap");
+      @import url("https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&display=swap");
+
+      body {
+        background: linear-gradient(135deg, #fff0ce, #ffcc74);
+        font-family: "Manrope", sans-serif;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+      }
+
+      h1 {
+        font-size: 70px;
+        margin-bottom: 1rem;
+        text-align: center;
+        color: #ecb176;
+        font-family: "Amatic SC", sans-serif;
+        margin: 0px;
+      }
+
+      p {
+        font-size: 1.2rem;
+        margin-bottom: 2rem;
+        text-align: center;
+        line-height: 1.5;
+        color: #9999;
+      }
+
+      .container {
+        background: linear-gradient(135deg, #fffbf2, #fbf6ee);
+        padding: 2rem;
+        border-radius: 10px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+        width: 100%;
+        max-width: 500px;
+        max-height: 80vh;
+        overflow-y: auto;
+      }
+
+      form p {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        margin-bottom: 1rem;
+        color: #9999;
+      }
+
+      .ultag{
+          display: flex;
+          flex-direction: column;
+          justify-content: start;
+          align-items: start;
+          gap: 10px;
+          list-style-type: none;
+        }
+        .litag label{
+          display: flex; 
+          align-items: center;
+          justify-content: center;
+          gap: 10px;
+        }
+
+      button {
+        background-color: #ecbe91;
+        border: none;
+        padding: 0.75rem 1.5rem;
+        border-radius: 5px;
+        color: #fff;
+        font-size: 1rem;
+        cursor: pointer;
+        transition: background-color 0.3s;
+        display: block;
+        margin: 1rem auto 0;
+        font-family: "Manrope", sans-serif;
+      }
+
+      button:hover {
+        background-color: #ecb176;
+      }
+
+      input,
+      select,
+      textarea {
+        width: calc(100% - 1rem);
+        padding: 0.7rem;
+        border: none;
+        border-radius: 5px;
+        margin-bottom: 1rem;
+        font-size: 1rem;
+      }
+
+      input {
+        background: #ffffff;
+        border: 1px solid rgb(161, 161, 161);
+        margin: 0;
+        width: fit-content;
+      }
+
+      input:focus,
+      select:focus,
+      textarea:focus {
+        outline: none;
+        box-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+      }
+
+      select {
+        background-color: #ffffff;
+        border: 1px solid rgb(161, 161, 161);
+        appearance: none;
+        cursor: pointer;
+        padding-right: 2rem;
+      }
+
+      select:focus {
+        box-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+      }
+
+      /* Custom arrow for select */
+      select::-ms-expand {
+        display: none;
+      }
+
+      .select-wrapper {
+        position: relative;
+      }
+
+      .select-wrapper::after {
+        content: "▼";
+        position: absolute;
+        right: 0.5rem;
+        top: 50%;
+        transform: translateY(-50%);
+        pointer-events: none;
+        color: #999;
+      }
+
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <form method="post">
+        {% csrf_token %}
+        <h1>{{ test.title }}</h1>
+<p>{{ test.description }}</p>
+{% for question in questions %}
+    <div>
+        <h3>{{ question.text }}</h3>
+        <ul class="ultag">
+            {% for answer in question.answers.all %}
+                <li class="litag">
+                    <label>
+                        <input type="radio" name="question_{{ question.id }}" value="{{ answer.id }}">
+                        {{ answer.text }}
+                    </label>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+{% endfor %}
+<button type="submit">Отправить</button>
+      </form>
+    </div>
+  </body>
+</html>

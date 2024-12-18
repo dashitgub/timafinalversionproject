@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Доступные тесты</title>
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Amatic+SC:wght@400;700&display=swap");
+      @import url("https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&display=swap");
+
+      body {
+        background: linear-gradient(135deg, #fff0ce, #ffcc74);
+        font-family: "Manrope", sans-serif;
+        color: #333;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+      }
+
+      h1 {
+        font-size: 70px;
+        margin-bottom: 1.5rem;
+        text-align: center;
+        color: #ecbe91;
+        font-family: "Amatic SC", sans-serif;
+        font-weight: 700;
+      }
+
+      ul {
+        list-style-type: none;
+        padding: 0;
+      }
+
+      li {
+        margin: 0.5rem 0;
+      }
+
+      a.button {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        background-color: #F0B98D;
+        color: white;
+        border: none;
+        border-radius: 20px;
+        padding: 10px 20px;
+        font-size: 1rem;
+        cursor: pointer;
+        display: inline-block;
+        text-align: center;
+      }
+
+      a.button:hover {
+        background-color: #ecb176;
+        transform: scale(1.05);
+      }
+
+      a {
+        text-decoration: none;
+        color: #fff;
+        background-color: #ecbe91;
+        padding: 0.5rem 2rem;
+        border-radius: 12px;
+        display: inline-block;
+        font-size: 1.2rem;
+        transition: background-color 0.3s, transform 0.3s;
+        font-family: "Manrope", sans-serif;
+      }
+
+      a:hover {
+        background-color: #ecb176;
+        transform: scale(1.05);
+      }
+
+      .container {
+        background: linear-gradient(135deg, #fffbf2, #fbf6ee);
+        text-align: center;
+        padding: 2rem;
+        border-radius: 10px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+        width: 90%;
+        max-width: 600px;
+      }
+    </style>
+  </head>
+  <body>
+    <div>
+      <a href="{% url 'user_login' %}" class="button">Войти</a>
+    </div>
+    <div class="container">
+      <h1>Доступные тесты</h1>
+      <ul>
+        {% for test in tests %}
+        <li>
+           <a href="{% url 'test_detail' test.pk %}">{{ test.title }}</a>
+        </li>
+        {% endfor %}
+      </ul>
+    </div>
+  </body>
+</html>

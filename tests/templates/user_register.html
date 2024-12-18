@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Amatic+SC:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&display=swap"
+      rel="stylesheet"
+    />
+
+    <title>Регистрация</title>
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Amatic+SC:wght@400;700&display=swap");
+      @import url("https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&display=swap");
+      body {
+        font-family: "Manrope", sans-serif;
+        color: #333;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+      }
+
+      .wrapper {
+        background: #fff;
+        display: flex;
+      }
+
+      .iceCream {
+        background: linear-gradient(135deg, #ffecc0, #ffb739);
+        border-radius: 30px 30px 120px 30px;
+        display: flex;
+        align-items: center;
+        padding-left: 48px;
+        padding-right: 30px;
+        width: 580px;
+      }
+
+      .bannerHeading {
+        font-size: 120px;
+        font-weight: 700;
+        font-family: "Amatic SC", sans-serif;
+        color: #ffffff;
+      }
+
+      .container {
+        padding: 2rem;
+        border-radius: 10px;
+        width: 100%;
+        max-width: 600px;
+      }
+
+      .heading {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-bottom: 30px;
+      }
+
+      h1 {
+        font-size: 90px;
+        margin: 0;
+        text-align: center;
+        color: #ecbe91;
+        font-family: "Amatic SC", sans-serif;
+        font-weight: 400;
+      }
+
+      h3 {
+        color: #999999;
+        font-size: 16px;
+        margin: 0;
+        font-weight: 400;
+      }
+
+      form {
+        margin: 0px auto;
+        display: flex;
+        flex-direction: column;
+        width: 360px;
+      }
+
+      label {
+        margin-bottom: 0.5rem;
+        font-weight: bold;
+        color: #999999;
+      }
+
+      input {
+        margin-bottom: 1rem;
+        height: 54px;
+        padding: 0px 16px;
+        border-radius: 12px;
+        font-size: 1rem;
+        background-color: #f5f7fa;
+        outline: none;
+        border: none;
+        font-family: "Manrope", sans-serif;
+      }
+
+      button {
+        background-color: #ecbe91;
+        color: #fff;
+        height: 86px;
+        border: none;
+        border-radius: 12px;
+        cursor: pointer;
+        font-size: 16px;
+        transition: background-color 0.3s ease;
+        font-family: "Manrope", sans-serif;
+      }
+
+      button:hover {
+        background-color: #ecb176;
+      }
+
+      .login-link {
+        text-align: center;
+        margin-top: 1rem;
+      }
+
+      .login-link a {
+        color: #ecbe91;
+        text-decoration: none;
+        font-size: 16px;
+      }
+      .alreadyHvAcc {
+        color: #999999;
+        font-size: 16px;
+      }
+
+      .login-link a:hover {
+        text-decoration: underline;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrapper">
+      <div class="iceCream">
+        <h2 class="bannerHeading">
+          ДОБРО <br />
+          ПОЖАЛОВАТЬ
+        </h2>
+      </div>
+      <div class="container">
+        <div class="heading">
+          <h1>регистрация</h1>
+          <h3>Заполните форму, чтобы создать свой аккаунт</h3>
+        </div>
+        <form method="post">
+          {% csrf_token %}
+          <label for="username">Имя</label>
+          <input type="text" id="username" name="username" required />
+
+          <label for="email">Email</label>
+          <input type="email" id="email" name="email" required />
+
+          <label for="password">Пароль</label>
+          <input type="password" id="password" name="password" required />
+
+          <button type="submit">ЗАРЕГИСТРИРОВАТЬСЯ</button>
+        </form>
+        <div class="login-link">
+          <span class="alreadyHvAcc"> Уже есть аккаунт? </span>
+          <a href="{% url 'user_login' %}">Войти</a>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
+
