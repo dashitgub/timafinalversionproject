@@ -14,54 +14,66 @@ def test_list(request):
     tests = Test.objects.all()
     return render(request, "test_list.html", {"tests": tests})
 
-@login_required
-def test_detail(request, pk):
-    user = request.user
-    test = get_object_or_404(Test, id=pk)
-    
-    try:
-        result, created = UserResult.objects.get_or_create(user=user, test=test, defaults={'some_field': 'new_value'})
-        questions = test.questions.all()
-        
-        if not questions.exists():
-            return render(request, "error.html", {"error": "Тест не содержит вопросов."})
+def test_detail(request, test_id):
+    test = get_object_or_404(Test, id=test_id)
+    questions = test.questions.all()
 
-        if request.method == "POST":
-            selected_answers = request.POST.getlist("selected_answer")
-            correct_count = 0 
-            total_questions = questions.count()
+    # Инициализация переменной selected_answers
+    selected_answers = []
 
-            for question, selected_answer in zip(questions, selected_answers):
-                if question.correct_answer == selected_answer:
-                    correct_count += 1
+    if request.method == "POST":
+        selected_answers = request.POST.getlist("selected_answer")  # Получаем выбранные ответы
+        correct_count = 0
+        total_questions = questions.count()
 
-            score = f"{correct_count}/{total_questions}"
-            result.some_field = score
-            result.save()
+        for question in questions:
+            # Получаем правильные ответы для текущего вопроса
+            correct_answers = question.answers.filter(is_correct=True)
+            correct_ids = [str(answer.id) for answer in correct_answers]  # Преобразуем ID в строки
 
-            return render(request, "test_result.html", {
-                "test": test,
-                "correct_count": correct_count,
-                "total_questions": total_questions
-            })
+            # Проверяем, совпадает ли выбранный ответ с правильным
+            if any(answer_id in selected_answers for answer_id in correct_ids):
+                correct_count += 1
 
-        return render(request, "test_detail.html", {"test": test, "questions": questions, "result": result})
+        score = correct_count
+        percentage = (correct_count / total_questions) * 100 if total_questions > 0 else 0
 
-    except IntegrityError:
-        return render(request, "error.html", {"error": "Ошибка при обработке данных."})
+        # Сохраняем результат пользователя  
+        UserResult.objects.update_or_create(
+            user=request.user,
+            test=test,
+            defaults={"score": score, "some_field": f"{correct_count}/{total_questions}"}
+        )
+
+        return render(request, "test_result.html", {
+            "test": test,
+            "correct_count": correct_count,
+            "total_questions": total_questions,
+            "percentage": round(percentage, 2),
+        })
+
+    # Возвращаем страницу теста для GET-запроса
+    return render(request, "test_detail.html", {
+        "test": test,
+        "questions": questions,
+    })
+
 
 def test_result(request, username):
     test_id = request.GET.get("test_id")
     test = get_object_or_404(Test, id=test_id)
+    result = UserResult.objects.filter(test=test, user__username=username).first()
 
-    results = UserResult.objects.filter(test=test, user__username=username)
-
-    if not results.exists():
+    if not result:
         return render(request, "test_result.html", {"test": test, "error": "Результаты не найдены."})
 
-    result = results.first()
+    percentage = (result.score / test.questions.count()) * 100 if test.questions.exists() else 0
 
-    return render(request, "test_result.html", {"test": test, "result": result})
+    return render(request, "test_result.html", {
+        "test": test,
+        "result": result,
+        "percentage": round(percentage, 2),
+    })
 
 def save_test_result(user, test, score):
     UserResult.objects.update_or_create(

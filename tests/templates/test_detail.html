@@ -151,25 +151,17 @@
     <div class="container">
       <form method="post">
         {% csrf_token %}
-        <h1>{{ test.title }}</h1>
-<p>{{ test.description }}</p>
-{% for question in questions %}
-    <div>
-        <h3>{{ question.text }}</h3>
-        <ul class="ultag">
+        {% for question in test.questions.all %}
+            <h3>{{ question.text }}</h3>
             {% for answer in question.answers.all %}
-                <li class="litag">
-                    <label>
-                        <input type="radio" name="question_{{ question.id }}" value="{{ answer.id }}">
-                        {{ answer.text }}
-                    </label>
-                </li>
+                <label>
+                    <input type="checkbox" name="selected_answer" value="{{ answer.id }}">
+                    {{ answer.text }}
+                </label><br>
             {% endfor %}
-        </ul>
-    </div>
-{% endfor %}
-<button type="submit">Отправить</button>
-      </form>
+        {% endfor %}
+        <button type="submit">Отправить</button>
+    </form>    
     </div>
   </body>
 </html>
